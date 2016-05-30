@@ -1,5 +1,15 @@
 delimiter $$
 
+-- Store which storages a machine has, and what types they are
+CREATE TABLE `hdfs_storages` (
+  `host_id` varchar(255) NOT NULL,
+  `storage_id` int(11) NOT NULL,
+  `storage_type` int(11) NOT NULL,
+  PRIMARY KEY (`storage_id`)
+) ENGINE=ndbcluster DEFAULT CHARSET=latin1$$
+
+delimiter $$
+
 CREATE TABLE `hdfs_block_infos` (
   `inode_id` int(11) NOT NULL,
   `block_id` bigint(20) NOT NULL,
@@ -86,6 +96,7 @@ CREATE TABLE `hdfs_inodes` (
   `is_dir` tinyint NOT NULL,
   `under_construction` tinyint NOT NULL,
   `subtree_locked` tinyint DEFAULT NULL,
+  `storage_policy` bit(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`partition_id`,`parent_id`,`name`),
   KEY `pidex` (`parent_id`),
   KEY `inode_idx` (`id`),

@@ -162,6 +162,11 @@ public class INodeClusterj implements TablesDef.INodeTableDef, INodeDataAccess<I
     @Column(name = SIZE)
     long getSize();
     void setSize(long size);
+
+    @Column(name = STORAGE_POLICY)
+    byte getStoragePolicy();
+
+    void setStoragePolicy(byte storagePolicy);
   }
 
   private ClusterjConnector connector = ClusterjConnector.getInstance();
@@ -319,7 +324,8 @@ public class INodeClusterj implements TablesDef.INodeTableDef, INodeDataAccess<I
               NdbBoolean.convert(inode.getUnderConstruction()),
               NdbBoolean.convert(inode.getSubtreeLocked()),
               inode.getSubtreeLockOwner(),
-              inode.getSize());
+              inode.getSize(),
+              inode.getStoragePolicy());
   }
 //  public List<ProjectedINode> findInodesForSubtreeOperationsWithWriteLockFTIS(
 //      int parentId) throws StorageException {
@@ -598,7 +604,8 @@ public class INodeClusterj implements TablesDef.INodeTableDef, INodeDataAccess<I
         NdbBoolean.convert(persistable.getSubtreeLocked()),
         persistable.getSubtreeLockOwner(),
         NdbBoolean.convert(persistable.getMetaEnabled()),
-        persistable.getSize());
+        persistable.getSize(),
+        persistable.getStoragePolicy());
     return node;
   }
 
@@ -625,6 +632,7 @@ public class INodeClusterj implements TablesDef.INodeTableDef, INodeDataAccess<I
     persistable.setSize(inode.getFileSize());
     persistable.setIsDir(NdbBoolean.convert(inode.isDirectory()));
     persistable.setPartitionId(inode.getPartitionId());
+    persistable.setStoragePolicy(inode.getStoragePolicy());
   }
 
   private void explain(HopsQuery<InodeDTO> query) {
