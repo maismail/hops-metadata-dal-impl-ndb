@@ -79,6 +79,11 @@ public class MetadataLogClusterj implements TablesDef.MetadataLogTableDef,
     short getOperation();
 
     void setOperation(short operation);
+
+    @Column(name = TIMESTAMP)
+    long getTimestamp();
+
+    void setTimestamp(long timestamp);
   }
 
 
@@ -160,6 +165,7 @@ public class MetadataLogClusterj implements TablesDef.MetadataLogTableDef,
     dto.setInodeName(logEntry.getInodeName());
     dto.setLogicalTime(logEntry.getLogicalTime());
     dto.setOperation(logEntry.getOperationOrdinal());
+    dto.setTimestamp(System.currentTimeMillis());
     return dto;
   }
 
