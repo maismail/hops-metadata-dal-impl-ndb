@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class XAttrClusterJ implements TablesDef.XAttrTableDef,
-    XAttrDataAccess<StoredXAttr> {
+    XAttrDataAccess<StoredXAttr, StoredXAttr.PrimaryKey> {
   
   static final Logger LOG = Logger.getLogger(VariableClusterj.class);
   
@@ -70,6 +70,26 @@ public class XAttrClusterJ implements TablesDef.XAttrTableDef,
   }
   
   private ClusterjConnector connector = ClusterjConnector.getInstance();
+  
+  @Override
+  public List<StoredXAttr> getXAttrsByPrimaryKeyBatch(
+      List<StoredXAttr.PrimaryKey> pks) throws StorageException {
+    HopsSession session = connector.obtainSession();
+    List<XAttrDTO> dtos = Lists.newArrayListWithExpectedSize(pks.size());
+    try {
+      for (StoredXAttr.PrimaryKey pk : pks) {
+        XAttrDTO dto = session.newInstance(XAttrDTO.class,
+            new Object[]{pk.getInodeId(), pk.getNamespace(), pk.getName()});
+        session.load(dto);
+        dtos.add(dto);
+      }
+      session.flush();
+      return convertAndCheck(session, dtos);
+    }finally {
+      session.release(dtos);
+    }
+  }
+  
   @Override
   public Collection<StoredXAttr> getXAttrsByInodeId(long inodeId) throws StorageException{
     HopsSession session = connector.obtainSession();
@@ -139,6 +159,17 @@ public class XAttrClusterJ implements TablesDef.XAttrTableDef,
     List<StoredXAttr> results = Lists.newArrayListWithExpectedSize(dtos.size());
     for(XAttrDTO dto : dtos){
       results.add(convert(dto));
+    }
+    return results;
+  }
+  
+  private List<StoredXAttr> convertAndCheck(HopsSession session,
+      List<XAttrDTO> dtos) throws StorageException {
+    List<StoredXAttr> results = Lists.newArrayListWithExpectedSize(dtos.size());
+    for(XAttrDTO dto : dtos){
+      if(session.found(dto)) {
+        results.add(convert(dto));
+      }
     }
     return results;
   }
