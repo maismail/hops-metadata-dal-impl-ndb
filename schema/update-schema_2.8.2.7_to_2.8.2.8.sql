@@ -47,3 +47,12 @@ ALTER TABLE `hdfs_quota_update` CHANGE `diskspace_delta` `storage_space_delta` b
 ALTER TABLE `hdfs_directory_with_quota_feature` CHANGE `dsquota` `ssquota` bigint(20);
 
 ALTER TABLE `hdfs_directory_with_quota_feature` CHANGE `diskspace` `storage_space` bigint(20);
+
+CREATE TABLE `hdfs_xattr` (
+  `inode_id` bigint(20) NOT NULL,
+  `namespace` tinyint(4) NOT NULL,
+  `name` varchar(255) COLLATE latin1_general_cs NOT NULL,
+  `value` varchar(13730) COLLATE latin1_general_cs DEFAULT NULL,
+  PRIMARY KEY (`inode_id`,`namespace`,`name`)
+) ENGINE=ndbcluster DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs COMMENT='NDB_TABLE=READ_BACKUP=1'
+/*!50100 PARTITION BY KEY (inode_id) */;

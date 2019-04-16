@@ -364,7 +364,7 @@ public class ClusterjConnector implements StorageConnector<DBSession> {
         HashBucketDataAccess.class, StorageDataAccess.class,
         AceDataAccess.class, RetryCacheEntryDataAccess.class, CacheDirectiveDataAccess.class,
         CachePoolDataAccess.class, CachedBlockDataAccess.class,
-        ActiveBlockReportsDataAccess.class);
+        ActiveBlockReportsDataAccess.class, XAttrDataAccess.class);
   }
   
   private boolean formatAll(boolean transactional) throws StorageException {
