@@ -151,7 +151,7 @@ public class XAttrClusterJ implements TablesDef.XAttrTableDef,
     dto.setINodeId(xattr.getInodeId());
     dto.setNamespace(xattr.getNamespace());
     dto.setName(xattr.getName());
-    dto.setValue(xattr.getValue());
+    dto.setValue(xattr.getValue() == null ? "" : xattr.getValue());
     return dto;
   }
   
@@ -167,7 +167,8 @@ public class XAttrClusterJ implements TablesDef.XAttrTableDef,
       List<XAttrDTO> dtos) throws StorageException {
     List<StoredXAttr> results = Lists.newArrayListWithExpectedSize(dtos.size());
     for(XAttrDTO dto : dtos){
-      if(session.found(dto)) {
+      //check if the row exists, default value is empty string
+      if(dto.getValue() != null) {
         results.add(convert(dto));
       }
     }
@@ -176,7 +177,7 @@ public class XAttrClusterJ implements TablesDef.XAttrTableDef,
   
   private StoredXAttr convert(XAttrDTO dto){
     return new StoredXAttr(dto.getINodeId(), dto.getNamespace(), dto.getName(),
-        dto.getValue());
+        dto.getValue().isEmpty() ? null : dto.getValue());
   }
   
 }

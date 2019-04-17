@@ -573,6 +573,8 @@ public class ClusterjConnector implements StorageConnector<DBSession> {
             truncate(transactional, io.hops.metadata.hdfs.TablesDef.CachedBlockTableDef.TABLE_NAME);
           } else if (e == ActiveBlockReportsDataAccess.class){
             truncate(transactional, io.hops.metadata.hdfs.TablesDef.ActiveBlockReports.TABLE_NAME);
+          } else if (e == XAttrDataAccess.class){
+            truncate(transactional, io.hops.metadata.hdfs.TablesDef.XAttrTableDef.TABLE_NAME);
           }
         }
         MysqlServerConnector.truncateTable(transactional,
