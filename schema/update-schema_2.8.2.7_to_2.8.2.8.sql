@@ -56,3 +56,5 @@ CREATE TABLE `hdfs_xattrs` (
   PRIMARY KEY (`inode_id`,`namespace`,`name`)
 ) ENGINE=ndbcluster DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs COMMENT='NDB_TABLE=READ_BACKUP=1'
 /*!50100 PARTITION BY KEY (inode_id) */;
+
+ALTER TABLE `hdfs_inodes` ADD COLUMN `num_xattrs` tinyint(4) NOT NULL DEFAULT '0';
