@@ -116,6 +116,20 @@ public class XAttrClusterJ implements TablesDef.XAttrTableDef,
   }
   
   @Override
+  public int removeXAttrsByInodeId(long inodeId) throws StorageException {
+    HopsSession session = connector.obtainSession();
+    HopsQueryBuilder qb = session.getQueryBuilder();
+    HopsQueryDomainType<XAttrDTO> dobj =
+        qb.createQueryDefinition(XAttrDTO.class);
+    HopsPredicate pred1 = dobj.get("iNodeId").equal(dobj.param("idParam"));
+    dobj.where(pred1);
+  
+    HopsQuery<XAttrDTO> query = session.createQuery(dobj);
+    query.setParameter("idParam", inodeId);
+    return query.deletePersistentAll();
+  }
+  
+  @Override
   public void prepare(Collection<StoredXAttr> removed, Collection<StoredXAttr> newed,
       Collection<StoredXAttr> modified) throws StorageException {
     HopsSession session = connector.obtainSession();
