@@ -115,10 +115,10 @@ public class MetadataLogClusterj implements TablesDef.MetadataLogTableDef,
           INodeMetadataLogEntry iNodeLogEntry =
               (INodeMetadataLogEntry) logEntry;
           DatasetINodeLookupDTO lookupDTO = createLookupPersistable(logEntry);
-          if (iNodeLogEntry.getOperation() == INodeMetadataLogEntry.INodeOperation.Add) {
+          if (iNodeLogEntry.getOperation() == INodeMetadataLogEntry.Operation.Add) {
             newLookupDTOS.add(lookupDTO);
           } else if (iNodeLogEntry.getOperation() ==
-              INodeMetadataLogEntry.INodeOperation.Delete) {
+              INodeMetadataLogEntry.Operation.Delete) {
             session.deletePersistent(lookupDTO);
             session.release(lookupDTO);
           }
@@ -147,10 +147,10 @@ public class MetadataLogClusterj implements TablesDef.MetadataLogTableDef,
         
         INodeMetadataLogEntry iNodeMetadataLogEntry =
             (INodeMetadataLogEntry) metadataLogEntry;
-        if (iNodeMetadataLogEntry.getOperation() == INodeMetadataLogEntry.INodeOperation.Add) {
+        if (iNodeMetadataLogEntry.getOperation() == INodeMetadataLogEntry.Operation.Add) {
           session.savePersistent(lookupDTO);
         } else if (iNodeMetadataLogEntry.getOperation() ==
-            INodeMetadataLogEntry.INodeOperation.Delete) {
+            INodeMetadataLogEntry.Operation.Delete) {
           session.deletePersistent(lookupDTO);
         }
       }
