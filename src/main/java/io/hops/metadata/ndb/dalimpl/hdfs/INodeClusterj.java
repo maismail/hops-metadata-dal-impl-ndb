@@ -30,7 +30,7 @@ import io.hops.metadata.hdfs.TablesDef;
 import io.hops.metadata.hdfs.dal.INodeDataAccess;
 import io.hops.metadata.hdfs.entity.INode;
 import io.hops.metadata.hdfs.entity.INodeIdentifier;
-import io.hops.metadata.hdfs.entity.MetadataLogEntry;
+import io.hops.metadata.hdfs.entity.INodeMetadataLogEntry;
 import io.hops.metadata.hdfs.entity.ProjectedINode;
 import io.hops.metadata.ndb.ClusterjConnector;
 import io.hops.metadata.ndb.NdbBoolean;
@@ -684,10 +684,10 @@ public class INodeClusterj implements TablesDef.INodeTableDef, INodeDataAccess<I
   }
 
   @Override
-  public void updateLogicalTime(Collection<MetadataLogEntry> logEntries)
+  public void updateLogicalTime(Collection<INodeMetadataLogEntry> logEntries)
       throws StorageException {
     HopsSession session = connector.obtainSession();
-    for(MetadataLogEntry logEntry : logEntries){
+    for(INodeMetadataLogEntry logEntry : logEntries){
       InodeDTO inodeDTO = createPersistable(session, logEntry);
       session.savePersistent(inodeDTO);
       session.release(inodeDTO);
@@ -700,12 +700,12 @@ public class INodeClusterj implements TablesDef.INodeTableDef, INodeDataAccess<I
     return MySQLQueryHelper.countWithCriterion(TablesDef.INodeTableDef.TABLE_NAME, query);
   }
 
-  private InodeDTO createPersistable(HopsSession session, MetadataLogEntry
+  private InodeDTO createPersistable(HopsSession session, INodeMetadataLogEntry
       logEntry) throws StorageException {
     InodeDTO inodeDTO = session.newInstance(InodeDTO.class);
-    inodeDTO.setPartitionId(logEntry.getInodePartitionId());
-    inodeDTO.setParentId(logEntry.getInodeParentId());
-    inodeDTO.setName(logEntry.getInodeName());
+    inodeDTO.setPartitionId(logEntry.getPartitionId());
+    inodeDTO.setParentId(logEntry.getParentId());
+    inodeDTO.setName(logEntry.getName());
     inodeDTO.setLogicalTime(logEntry.getLogicalTime());
     return inodeDTO;
   }

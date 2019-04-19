@@ -58,3 +58,7 @@ CREATE TABLE `hdfs_xattrs` (
 /*!50100 PARTITION BY KEY (inode_id) */;
 
 ALTER TABLE `hdfs_inodes` ADD COLUMN `num_xattrs` tinyint(4) NOT NULL DEFAULT '0';
+
+ALTER TABLE `hdfs_metadata_log` CHANGE `inode_partition_id` `pk1` bigint(20);
+ALTER TABLE `hdfs_metadata_log` CHANGE `inode_parent_id` `pk2` bigint(20);
+ALTER TABLE `hdfs_metadata_log` CHANGE `inode_name` `pk3` varchar(255) COLLATE latin1_general_cs NOT NULL DEFAULT '';
